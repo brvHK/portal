@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% block title %} - プロローグ - {{title}}{% endblock %} {% load static %} {% block header %}
+<link href="{% static 'css/Story.css' %}" rel="stylesheet">
+<style type="text/css">
+    main {
+        background-image: url("/static/img/story/bg_{{chapter}}.jpg");
+    }
+</style> {% endblock %} {% block main %}
+<div class="container">
+    <div class="prologue-title">
+        <h1 id="title">{{ title }}</h2>
+            <h2 id="sub_title">{{ sub_title }}</h3>
+    </div>
+    <div id="{{chapter}}" class="story-prologue">
+        <div class="story-image">
+            <div id="story-wrapper">
+                <img class="prologue-img" src="/static/img/story/{{chapter}}.jpg">
+            </div>
+        </div>
+        <div class="story-invite">
+            <section class="invite">
+                <pre class="story-contents" style="background-color: rgba(0,0,0,0.5); color: white;">{{story}}</pre>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block new %}
+<div id="new">
+
+</div>
+{% endblock %} {% block Artist %} {% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% load static %}{% block title %}Fの世界 とは{% endblock %} {% block header %}
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+<link href="{% static 'css/information.css' %}" rel="stylesheet"> {% endblock %} {% block main %}
+<div class="information-wrapper" id="main">
+    <h1 class="page-header"><i class="fa fa-question-circle-o" aria-hidden="true"></i>&nbsp;<strong class="F">F</strong>&nbsp;の世界<small>&nbsp;&nbsp;&nbsp;&nbsp;- World of <strong class="F">F</strong>&nbsp;- とは</small></h1>
+    <div class="pre-section">
+        <section>　<a href="{% url 'HaLu' %}">HaLu</a>の創作するオリジナルファンタジー世界の総称。3つの世界が存在し、3つの世界はそれぞれ異なる特徴を持っている。</section>
+    </div>
+    <div class="pre-section">
+        <section class="vision">
+この世界に似ているが、どこか違う世界。この世界のどこかに入口が存在し、<strong>「通行証」</strong>を持つ人は自由に行き来することができる。<br>通行証を持ち、<strong class="F">F</strong>の世界に足を踏み入れている人を「<strong class="F">F</strong>の旅人」と呼ぶ。<br>「通行証」の形は人それぞれで、自分に合ったものが見つかればすぐにそれだと気付く事ができます。<br>ただし、「旅の掟」を破れば<strong class="F">F</strong>の世界から抜け出せなくなります。ご注意を。</section>
+    </div>
+    <br />
+    <div class="describe pre-section">
+        <dl>
+            <dt>1st : The <strong class="F">F</strong>ixed World
+                <dd>サブタイトルは「失われし時の世界」<br>この世界への扉を開くと、レトロ感溢れる中世北欧のような街並みが広がり、街の中央にはシンボルとなる時計台が建っている。<br>この街の人は皆、 <span class="item-name">「時の装身具」</span>を身に着けているのが特徴。&nbsp;――…というのも、かつて、この街の人は <strong>「時の魔術師」</strong>と呼ばれていたのだとか。</dd>
+            </dt>
+        </dl>
+        <dl>
+            <dt>2nd : <strong class="F">F</strong>licker's Story
+                <dd>この世界への扉を開くと、緑溢れるフィールドに行く事ができる。<br>探索してみると、緑だけでなく、あらゆる自然が豊かな場所だという事がわかるだろう。<br>まだ「魔法」が存在する世界の為か、科学技術は発展していない。未開の地も多く解明されていない事がままあり、自由気ままな冒険者の興味を引く。<br>また、世界の中央には空に浮かぶ大陸が存在する。途方もない程昔からあるが、その地に足を踏み入れた者は未だかつて居ない</dd>
+            </dt>
+        </dl>
+        <dl>
+            <dt>3rd：Magical Fantasy
+                <dd>この世界の扉を開けると、猫の多く棲む町が姿を現す。その町の名はシュリンゲル。<br>別名「猫の町」この町の上空に大きな雲が掛かる日の、夢の中に宇宙色の眼を持つ猫が出てくるのだそう。町の人はその猫の事を<strong class="item-name">「宇宙猫  -  ソラネコ  -  」</strong>と呼ぶ。<br>なんでも、ソラネコの夢を見ると良いことがあるのだとか…。観光のためにシュリンゲルを訪れる人も多い。</dd>
+            </dt>
+        </dl>
+    </div>
+</div>
+<script src="{% static 'js/index.js' %}" type="text/javascript" charset="utf-8"></script>
+
+{% endblock %}

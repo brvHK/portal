@@ -1,0 +1,69 @@
+{% extends "cms/post/base.html" %} {% load static %} {% block title %}投稿の{{ edit_type }}{% endblock title %}
+{% block post_main %}
+<div id="main-contents">
+    <div class="post-form-wrapper">
+        <div class="item-form">
+        <h3 class="page-header">投稿の<strong>{{ edit_type }}</strong></h3>
+        {% if post_id %}
+        <form action="{% url 'post:mod' post_id=post_id %}" method="post" class="form-item" role="form"
+            autocomplete="off" enctype="multipart/form-data">
+            {% else %}
+            <form action="{% url 'post:add' %}" method="post" class="form-item" role="form" autocomplete="off"
+                enctype="multipart/form-data">
+                {% endif %} {% csrf_token %}
+                <div class="form-group">
+                    {{ form.title.id_forlabel }}{{ form.title.label_tag }}{{ form.title }}{{ form.title.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.abstract.id_forlabel }}{{ form.abstract.label_tag }}{{ form.abstract }}{{ form.abstract.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.body.id_forlabel }}{{ form.body.label_tag }}{{ form.body }} {{ form.body.errors }}{{ form.media }}
+                </div>
+                <hr>
+                <div class="form-group">
+                    {{ form.category.id_forlabel }}{{ form.category.label_tag }}{{ form.category }}
+                    {{ form.category.errors }}
+                    <a href="javascript:void(0);" onclick="window.open('{% url 'post:popup_category_create' %}','subwin','width=500,height=500');">+</a>
+                </div>
+                <div class="form-group">
+                    {{ form.tag.id_forlabel }}{{ form.tag.label_tag }}{{ form.tag }}{{ form.tag.errors }}
+                    <a href="javascript:void(0);" onclick="window.open('{% url 'post:popup_tag_create' %}','subwin','width=500,height=500');">+</a>
+                </div>
+                <div class="form-group">
+                    {{ form.thumnail.id_forlabel }}{{ form.thumnail.label_tag }}{{ form.thumnail }}{{ form.thumnail.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.is_publish.id_forlabel }}{{ form.is_publish.label_tag }}{{ form.is_publish }}{{ form.is_publish.errors }}
+                </div>
+            </div>
+           
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button class="btn btn-primary" type="submit" name="save_and_add">保存してもう一つ追加</button>
+                    <button class="btn btn-primary" type="submit" name="save_and_edit">保存して編集を続ける</button>
+                    <a href="{% url 'post:list' %}" class="btn btn-back btn-sm">戻る</a>
+                </div>
+            </form>
+            <script>
+                function add_option(name, pk, selector_id){
+                    var select = document.getElementById(selector_id);
+                    var option = document.createElement("option");
+                    option.setAttribute('value', pk);
+                    option.innerHTML = name;
+                    select.add(option,0);
+                    select.options[0].selected = true;
+                }
+
+                function add_category(name, pk){
+                    add_option(name, pk, "id_category")
+                }
+
+                function add_tag(name, pk){
+                    add_option(name, pk, "id_tag");
+                }
+            </script>
+
+    </div>
+</div>
+{% endblock post_main %}

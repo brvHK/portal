@@ -1,0 +1,105 @@
+{% extends "base.html" %} {% load static %}{% load custom_filter %} {% block title %}ブログ{% endblock title %}
+{% block head_extra %}
+<link href="{% static 'css/post.css' %}" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css" media="print" onload="this.media='all'">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>
+    const elements = document.getElementsByClassName('markdownx');
+    for (element of elements) {
+        element.addEventListener('markdownx.update', event => {
+            for (const block of document.querySelectorAll('pre code')) {
+                hljs.highlightBlock(block);
+            }
+        });
+    }
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+      }
+    });
+</script>
+<script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+{% endblock %} 
+{% block main %}
+<header class="post-header">
+    <div class="post-header-image-wrapper">
+        <img src="{% static 'img/post/羊.JPG' %}">
+        <div class="post-header-image__content">
+            <h1 class="post-header-title"><a href="/post" style="color:white;">日々の雑記</a></h1>
+        
+        </div>
+        
+    </div>
+    
+    <nav class="post-header-navigation">
+        <div class="pc-nav">
+            {% for post_big_category in post_big_categories%}
+            <div class="pc-menu"><a href="{% url 'post:list' %}?postbigcategory={{ post_big_category.pk }}" style="color:gray;">{{ post_big_category.name }}</a></div>
+            {% endfor %}
+        </div>                        
+    </nav>
+</header>
+<main class="post-main">
+<div class="post-contents">
+{% block post_main %}{% endblock %}
+</div>
+<aside class="post-aside">
+    <div class="post-aside-inner card">
+    {% block post_aside_before %}{% endblock %}
+    <h2 class="post-aside-title item-title">最新記事</h2>
+        {% for post in newest_posts %}
+            <div class="post-aside-list"><a href="{% url 'post:detail' post.pk %}" style="display:block;">{{ post.title }}</a>
+                <span style="display:block;">{{ post.created_at}}</span>
+            
+            </div>
+        {% endfor %}
+    <div class="ad">
+        広告
+    </div>
+    <div class="post-categories">
+        <h2 class="post-aside-title item-title">カテゴリ</h2>
+        <ul class="post-aside-menu">
+        {% for small_category in small_categories %}<li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?smallcategory={{ small_category.id }}">{{ small_category.name }}</a></li>{% endfor %}
+        </ul>
+    </div>
+    <div class="post-tags">
+        <h2 class="post-aside-title item-title">タグ一覧</h2>
+        <div class="post-tags-inner">
+        {% for tag in tags_all %}<span class="post-tag tag tag-update"><a style="color:white;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></span>{% endfor %}
+        </div>
+    </div>
+    
+</div>
+</aside>
+</main>
+<footer class="post-footer">
+    <div class="footer-contents">
+        <div class="footer-introduce">
+            <a href="/post">日々の雑記</a>
+        </div>
+        <div class="footer-item">
+            <h2 class="post-aside-title item-title">カテゴリ</h2>
+            <ul class="footer-menu">
+                {% for small_category in small_categories %}
+                <li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?smallcategory={{ small_category.id }}">
+                {{ small_category.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="footer-item">
+            <h2 class="post-aside-title item-title">タグ</h2>
+            <ul class="footer-menu">
+                {% for tag in tags_all %}
+                <li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block extrastyle %}{% endblock %} {% block extrahead %}{% endblock %}{% block main %} {% if form.errors %}
+<div class="alert alert-danger" role="alert">
+    <p>ユーザ名またはパスワードが正しくありません。</p>
+</div>
+{% endif %}
+<div class="login-panel-wrapper">
+    <div class="login-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">ログアウト完了</h3>
+        </div>
+
+        <div class="panel-body">
+            <i class="fas fa-fw fa-sign-out-alt"></i><a href="/login">ログイン</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

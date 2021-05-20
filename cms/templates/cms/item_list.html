@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% load custom_filter %} {% block title %}作品の一覧{% endblock title %} {% block extrahead %}
+<style>
+    table {
+        margin-top: 8px;
+    }
+</style>
+{% endblock %} {% block main %}
+<div id="main-visual" class="container">
+    {% if user.is_authenticated %}
+            <a href="{% url 'cms:item_add' %}" class="button-sticky add-button"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            {% endif %}
+    <div id="filter" class="row">
+        <h1 class="index-contents">作品の一覧</h3>
+            
+            {% if category_id and category %}
+                <div class="item-filter">
+                    <a href="{% url 'cms:item_list' %}{% if page_obj.number  %}?page={{ page_obj.number }}{% endif %}" class="filter-cansel-button">&nbsp;{{ category.category }}&nbsp;<i class="fas fa-times-circle"></i></a>
+                </div>
+                {% elif category_id %}
+                <a href="{% url 'cms:item_list' %}{% if page_obj.number  %}?page={{ page_obj.number }}{% endif %}" class="filter-cansel-button">カテゴリがありませんでした: &nbsp; {{ category_id }}<i class="fas fa-times-circle"></i></a>
+            {% endif %}
+            <div>{% if is_paginated %}
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'cms:item_list' %}?{% query_transform request page=page_obj.previous_page_number %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                      <span class="page-link">
+                        {{ num }}
+                        <span class="sr-only">(current)</span>
+                      </span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'cms:item_list' %}?{% query_transform request page=num  %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="{% url 'cms:item_list' %}?{% query_transform request page=page_obj.next_page_number %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+                {% endif %}</div>
+                
+
+            <div class="items">
+                
+                {% for item in object_list %}
+                <div class="item item-card">
+                    <span class="item-categoty-tag"><a href="{% url 'cms:item_list' %}?category={{ item.category.pk }}">{{ item.category }}</a></span>
+                    <div class="item-image-wrapper" id="item-id-{{ item.id }}">
+                    {% with images=item.id|item_images %}
+                    {% for image in images %}
+                    <span class="lightness-icon">
+                        {%if image.is_in_dark %}
+                        <i class="fas fa-moon"></i>
+                        {% else %}
+                            <i class="fas fa-sun"></i>
+                        {% endif %}
+                    </span>
+                        <img src="{{ image.img.url }}" alt="{{ image.alt }}">
+                        
+                        <style>
+                        #item-id-{{ item.id }} img:nth-of-type({{ forloop.counter }}),
+                        #item-id-{{ item.id }} span:nth-of-type({{ forloop.counter }})
+                         { 
+                            animation-delay: {{ forloop.counter|make_delay }}s;}
+                            {% if forloop.last %}
+                            #item-id-{{ item.id }} img,
+                            #item-id-{{ item.id }} span{animation  : ItemSlideAnime {{ forloop.counter|make_delay|add:"9" }}s ease infinite;}{% endif %}
+                        }
+                        #item-id-{{ item.id }} img:nth-of-type(1){
+                            position: relative;
+                        }
+                        
+                        </style>
+                        
+                    {% endfor %}
+                    {% endwith %}
+                    </div>
+                    <h2 class="after-image item-title">{{ item.name }}</h2>
+                    <div class="item-create-date-wrapper">
+                        <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ item.date }}</span>
+                    </div>
+                    <section class="item-describe">
+                        {% slice item.detail 50 %}<br>
+                    ・・・</section>
+                    <div>
+                        <span class="tag tag-chapter">{{ item.chapter.chapter }}</span>
+                    </div>
+
+                    
+                    <div>
+                        <a class="item-card-link" href="{% url 'cms:item_detail' item.id %}"></a>
+                    </div>
+                    
+                        {% if user.is_authenticated %}
+                        <div class="authenticated">
+                        <a href="{% url 'cms:item_mod' item_id=item.id %}" class="btn btn-default btn-sm">修正</a>
+                        <a href="#" class="btn btn-default btn-sm">削除</a></div>
+                        {% endif %}
+                </div>
+               
+                {% endfor %}
+            </div>
+    </div>
+</div>
+</div>
+{% endblock %}

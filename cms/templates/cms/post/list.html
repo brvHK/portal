@@ -1,0 +1,100 @@
+{% extends "cms/post/base.html" %} {% load custom_filter %} {% block title %}投稿一覧{% endblock title %} {% block extrahead %}
+<style>
+    table {
+        margin-top: 8px;
+    }
+</style>
+{% endblock %} {% block post_main %}
+<div id="main-visual" class="container">
+    <div id="filter" class="row">
+        <h1 class="page-header">投稿の一覧</h1>
+            {% if user.is_authenticated %}
+            <a href="{% url 'post:add' %}" class="button-sticky add-button"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            {% endif %}
+            <div class="post-list-wrapper">
+                {% if tag %}タグ : {{ tag }}{% endif %}
+
+                {% if user.is_authenticated %}
+                <div class="admin-portal">
+                    <h2 class="item-title">管理者しか見えません</h2>
+                    {% for not_published_post in not_published_posts %}
+                    <div class="item-card flex-container">
+                        <div class="post-image-wrapper" id="post-id-{{ not_published_post.id }}">
+                            <span class="item-categoty-tag">{{ not_published_post.category }}</span>
+                            {% if not_published_post.thumnail %}
+                            <img src="{{ not_published_post.thumnail.url }}" alt="{{ not_published_post.thumnail }}">
+                            {% else %}
+                            <img src="/static/img/no_image_logo.png" alt="No image"/>
+                            {% endif %}
+                        </div>
+                        <div class="post__content">
+                            <h2 class="after-image item-title">{{ not_published_post.title }}</h2>
+                            <div class="item-create-date-wrapper">
+                                <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ not_published_post.created_at }}</span>
+                                <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ not_published_post.updated_at }}</span>
+                                
+                            </div>
+                            <section class="item-describe">
+                            {{ not_published_post.abstract }}
+                            </section>
+                            <div class="post-tags">
+                                {% for tag in not_published_post.tag.all %}<span class="tag tag-update">#{{ tag.name }}</span>{% endfor %}
+                                <span class="tag tag-update right-0" style="min-width: 120px; padding:7px 5px;">※非公開</span>
+                            </div>
+                        </div>
+                            <a class="item-card-link" href="{% url 'post:detail' not_published_post.id %}">詳細</a>
+                        
+                    </div>
+                    <div class="admin-only-buttons">
+                        <span>
+                            <a href="{% url 'post:mod' post_id=not_published_post.id %}" class="btn btn-default btn-sm">修正</a>
+                            <a href="#" class="btn btn-default btn-sm">削除</a>
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% for post in object_list %}
+                <div class="item-card flex-container">
+                    <span class="item-categoty-tag">{{ post.category }}</span>
+                    <div class="post-image-wrapper" id="post-id-{{ post.id }}">
+                        {% if post.thumnail %}
+                        <img src="{{ post.thumnail.url }}" alt="{{ post.thumnail.name}}"/>
+                        {% else %}
+                        <img src="/static/img/no_image_logo.png" alt="No image"/>
+                        {% endif %}
+                    </div>
+                    <div class="post__content">
+                    <h2 class="after-image item-title">{{ post.title }}</h2>
+                    <div class="item-create-date-wrapper">
+                        <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ post.created_at }}</span>
+                        <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ post.updated_at }}</span>
+                    </div>
+                    <section class="item-describe">
+                       {{ post.abstract }}
+                    </section>
+                    <div>
+                        {% for tag in post.tag.all %}<span class="tag tag-update">#{{ tag.name }}</span>{% endfor %}
+                    </div>
+                </div>
+                    <a class="item-card-link" href="{% url 'post:detail' post.id %}">詳細</a>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="admin-only-buttons">
+                    <span>
+                        
+                        <a href="{% url 'post:mod' post_id=post.id %}" class="btn btn-default btn-sm">修正</a>
+                        <a href="#" class="btn btn-default btn-sm">削除</a>
+                        
+                    </span>
+                </div>
+                    {% endif %}
+                
+                {% empty %}
+                <p>申し訳ありませんが、記事は 0 件でした。</p>
+                {% endfor %}
+            </div>
+    </div>
+</div>
+{% endblock %}

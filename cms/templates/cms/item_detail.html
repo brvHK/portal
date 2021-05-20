@@ -1,0 +1,122 @@
+{% extends "base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.name }} 作品紹介
+{% endblock %}{% block extrahead %}
+{% endblock %} {% block main %}
+<div id="main-visual" class="container">
+    <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="/item/" itemprop="item">
+                <span itemprop="name">全ての作品</span>
+            </a>
+            <meta itemprop="position" content="1" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="/item/?category={{ object.category.id }}" itemprop="item">
+                <span itemprop="name">{{ object.category }}</span>
+            </a>
+            <meta itemprop="position" content="2" />
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="" itemprop="item">
+                <span itemprop="name">{{ object.name }}</span>
+            </a>
+            <meta itemprop="position" content="3" />
+        </li>
+    </ul>
+    <div class="item-detail-wrapper">
+        <div class="item-detail item-card">
+            <h1 class="item-title">{{ object.name }}</h1>
+
+            <div class="item-image" data-ride="carousel">
+                <div class="item-image-wrapper image-frame" id="item-id-{{ item.id }}">
+                    {% with images=object.id|item_images %}
+                    {% for image in images %}
+                    <span class="lightness-icon">
+                        {%if image.is_in_dark %}
+                        <i class="fas fa-moon"></i>
+                        {% else %}
+                        <i class="fas fa-sun"></i>
+                        {% endif %}
+                    </span>
+                    {% if object.is_sold %}
+                    <div class="ribbon_soldout">
+                        <span class="ribbon">SOLD OUT</span>
+                    </div>
+                    {% endif %}
+                    {% if object.date|is_new %}
+                    <div class="ribbon_new-wrapper">
+                        <span class="ribbon_new">NEW</span>
+                    </div>
+                    {% endif %}
+                        <img src="{{ image.img.url }}" alt="{{ image.alt }}">
+                    <style>
+                        #item-id-{{ item.id }} img:nth-of-type({{ forloop.counter }}),
+                        #item-id-{{ item.id }} span:nth-of-type({{ forloop.counter }}) {
+                            animation-delay: {{ forloop.counter|make_delay }}s;
+                        }
+                        {% if forloop.last %}
+                        #item-id-{{ item.id }} img,
+                        #item-id-{{ item.id }} span {
+                            animation : ItemSlideAnime {{ forloop.counter|make_delay|add:"9" }}s ease infinite;
+                        }
+                        {% endif %}
+                        #item-id-{{ item.id }} img:nth-of-type(1){
+                            position: relative;
+                        }
+                        }
+                    </style>
+                    {% endfor %}
+                    {% endwith %}
+                </div>                    
+            </div>
+            <div class="item-comments">
+                <div class="" id="detail">
+
+                </div>
+                <div class="item-create-date-wrapper">
+                    <span class="item-create-date"><i class="fas fa-calendar-day"></i>&nbsp;{{ item.date }}</span>
+                </div>
+                <div class="detail-wrapper">
+                    <p> {{ object.detail }}</p>
+                </div>
+                {%if object.minne_url %}
+                <div class="minnne-wrapper">
+                    <img src="" />
+                    <p>こちらは、<a href="{{ object.minne_url }}">ミンネ</a>で取り扱い中です</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="HaLu-comments">
+                <div class="comment-wrapper">
+                    <p>作者より♪</p>
+                    <div class="faceicon">
+                        <img src="/static/img/about/HaLu.jpg" />
+                    </div>
+                    <div class="comment">
+                    <div class="says">
+                        <p>{{ object.comment }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="item-prev-next">
+                <div class="item-prev">
+                    {% with prev=object.get_previous_by_date %}
+                    {% if prev %}
+                        <p>Prev</p>
+                        <a class="" title="Prev ({{ prev.name}})" href="{% url 'cms:item_detail' prev.pk %}"><i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;{{ prev.name }}</a>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="item-next">
+                    {% with next=object.get_next_by_date %}
+                        {% if next %}
+                        <p>Next</p>
+                            <a  class="" title="Next ({{ next.name }})" href="{% url 'cms:item_detail' next.pk %}">{{ next.name }}&nbsp;&nbsp;&nbsp;<i class="fas fa-forward"></i></a>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}
+    

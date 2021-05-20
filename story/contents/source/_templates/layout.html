@@ -1,0 +1,141 @@
+{% extends "basic/layout.html" %}
+{%- block doctype %}
+<!DOCTYPE html> {%- endblock doctype %}
+<html lang="ja">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
+    <link rel="stylesheet" href="/static/css/common.css" type="text/css" />
+    <link rel="stylesheet" href="{{ pathto('_static/reset.css', 1) }}" type="text/css" />
+</head>
+
+<body>
+    {%- block header %}
+    <div class="story-container">
+        <header class="global-site-header">
+            <nav class="sp-nav">
+                <div class="sp-menu">
+                    <a href="/"><img id="brand-logo" src="/static/img/logo.png"  alt="World of F" hspace="7"
+                            vspace="7" /></a>
+                </div>
+                <div id="nav-drawer" class="sp-menu">
+                    <input id="nav-input" type="checkbox" class="nav-unshown">
+                    <label id="nav-open" for="nav-input"><span></span></label>
+                    <label class="nav-unshown" id="nav-close" for="nav-input"></label>
+                    <div id="nav-content">
+                        <div class="sp-header-brand-logo">
+                            <a href="/"><img id="brand-logo" src="/static/img/logo.png" alt="World of F" hspace="7"
+                                    vspace="7" /></a>
+                        </div>
+                        <ul class="sp-header-menu">
+                            <li class="sp-header-menu-list"><a class="header-icon header-icon-site" id="about_site" href="/about/this-site">Fの世界とは</a>
+                            </li>
+                            <!-- <li class="header-search-item">
+                            <input placeholder="Search" type="search" class="header-search">
+                            <a class="header-icon header-icon-search"><span>Search</span></a>
+                        </li> -->
+                            <li class="sp-header-menu-list">
+                                <a href="/story" class="header-icon header-icon-story" id="story">小説プロローグ</a><input id="story-check" type="checkbox">
+
+                                <ul class="header-submenu">
+                                    <li><a class="header-icon header-icon-story" href="/story/prologue/1st/">The <strong
+                                                class="F">F</strong>ixed World</a></li>
+                                    <li><a class="header-icon header-icon-story" href="/story/prologue/2nd/">The <strong
+                                                class="F">F</strong>lickers Story</a></li>
+                                    <li><a class="header-icon header-icon-story" href="#">The Magical <strong
+                                                class="F">F</strong>antasy</a></li>
+                                </ul>
+                            </li>
+                            <li class="sp-header-menu-list"><a class="header-icon header-icon-about" href="/about/HaLu">HaLuについて</a></li>
+                            <li class="sp-header-menu-list"> <a class="header-icon header-icon-info" href="/information">情報</a> </li>
+                            <li class="sp-header-menu-list"><a class="header-icon header-icon-blog" href="https://blog.world-of-f.website"
+                                    target="_blank">ブログ</a></li>
+                            <li class="sp-header-menu-list"><a href="/story-contents/index.html">&raquo;小説</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <nav class="pc-nav">
+                <div class="pc-menu"><a href="/item" class="header-menulinks">ITEM</a></div>
+                <div class="pc-menu"><a href="/story" class="header-menulinks">STORY</a></div>
+                <div class="pc-menu">
+                    <a href="/"><img id="brand-logo" src="/static/img/logo.png" alt="World of F" hspace="7"
+                            vspace="7" /></a>
+                </div>
+
+                <div class="pc-menu"><a href="#" class="header-menulinks">ABOUT US</a></div>
+                <div class="pc-menu"><a href="/information" class="header-menulinks">INFO</a></div>
+            </nav>
+
+
+        </header>
+        {%- endblock header %} {%- block sidebar %}
+        <div id="sidebar">
+            <h2>sidebar</h2>
+        </div>
+        {%- endblock sidebar %} {%- block document %}
+        <main id="story">
+            <div class="document-body card">
+                {%- block body %}{%- endblock body %}
+            </div>
+        </main>
+        <!-- -->
+        {%- endblock document %} {%- block footer %}
+        <footer class="global-site-footer">
+            <div class="footer-contents">
+                <div class="footer-introduce">
+                    <a href="/" style="color: white;"><strong class="F">F</strong> の世界</a>
+                    
+                    <div class="halu-twitter">
+                        <a href="https://twitter.com/Hyu_HaLu?lang=ja" target="_blank" class="twitter-button"
+                            title="HaLuのtwitterへ"><i class="fab fa-twitter fa-skyblue" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="footer-item">
+                    <ul class="footer-menu">
+                        <li class="footer-menu-list"><a class="footer-icon header-icon-site" id="about_site"
+                                href="/about/this-site">Fの世界とは</a>
+                        </li>
+                        <li class="footer-menu-list"><a class="footer-icon header-icon-about"
+                                href="/item">ITEM</a></li>
+                        <!-- <li class="header-search-item">
+                        <input placeholder="Search" type="search" class="header-search">
+                        <a class="header-icon header-icon-search"><span>Search</span></a>
+                    </li> -->
+                        <li class="footer-menu-list">
+                            <a href="/story" class="footer-icon header-icon-story">小説プロローグ</a>
+
+                            
+                        </li>
+                        <li class="footer-menu-list"><a class="footer-icon header-icon-about"
+                                href="/about/HaLu">HaLuについて</a></li>
+                        <li class="footer-menu-list"> <a class="footer-icon header-icon-info"
+                                href="/information">情報</a> </li>
+                        <li class="footer-menu-list"><a class="footer-icon header-icon-blog"
+                                href="https://blog.world-of-f.website" target="_blank">ブログ</a></li>
+                        <li class="footer-menu-list"><a class="footer-icon" href="/story-contents/index.html">&raquo;小説</a></li>
+                    </ul>
+                </div>
+                <div class="footer-stoty">
+                    <ul class="footer-menu">
+                        <li><a class="footer-icon header-icon-story" href="/story/prologue/1st">The <strong
+                                    class="F">F</strong>ixed World</a></li>
+                        <li><a class="footer-icon header-icon-story" href="/story/prologue/2nd">The <strong
+                                    class="F">F</strong>lickers Story</a></li>
+                        <li><a class="footer-icon header-icon-story" href="#">The Magical <strong
+                                    class="F">F</strong>antasy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>Copyright : <a  class="footer-icon" href="/about/HaLu">HaLu</a> &<a  class="footer-icon" href="/about/Ken">Ken</a> </p>
+                <p>since 2013 - 2020 </p>
+            </div>
+        </footer>
+    </div>
+    {%- endblock footer %}
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+{% extends "cms/post/base.html" %} {% load static %} {% load custom_filter %} {% block title %}World of F 投稿{% endblock %}{% block post_main %}
+    <section class="post-index">
+        <p>日々の某を書き連ねます。</p>
+        <p>IT関連、日々の生活など</p>
+        <p>各投稿は、 <a href="{% url 'post:list' %}">投稿一覧</a>からご覧ください。</p>
+
+    </section>
+    {% if user.is_authenticated %}
+    <div class="admin-portal">
+        <h2 class="item-title">管理画面</h2>
+        <p>この部分は管理者しか見えません</p>
+        <div class="admin-vitual-wrapper">記事のグラフ
+        {% autoescape off %}
+        {{ plot_gantt }}　 <!-- HTMLコードの文字列が格納されたコンテキスト -->
+        {% endautoescape %}
+        <h3>記事にコメントがあります</h3>
+        <ul>
+            {% for comment in comments_not_allowed %}
+            <li>{{ comment }}<a href="/admin/cms/comment/{{ comment.id }}/change/" target="_blank">→承認はこちら</a><p>記事 : <a href="{% url 'post:detail' comment.target.id %}">{{ comment.target }}</a></p></li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+
+    {% endif %}
+{% endblock %} 

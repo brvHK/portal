@@ -1,0 +1,38 @@
+{% extends "cms/post/base.html" %} {% load static %} {% block title %}コメント投稿{% endblock title %}
+{% block head_extra %}
+<link href="{% static 'css/post.css' %}" rel="stylesheet" media="print" onload="this.media='all'">
+<script src='https://www.google.com/recaptcha/api.js'></script>    
+{% endblock %} {% block post_main %}
+<div id="main-contents">
+    <div class="post-form-wrapper">
+        <div class="item-form">
+        <h3 class="page-header">コメント投稿</h3>
+        <form action="{% url 'post:comment_create' pk=post.pk %}" method="post" class="form-item" role="form" autocomplete="off"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <p>元記事 <a href="{% url 'post:detail' post.pk %}">{{ post.title }}</a></p>
+            </div>
+            <div class="form-group">
+                {{ form.name.id_forlabel }}{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}
+            </div>
+            <div class="form-group">
+                {{ form.text.id_forlabel }}{{ form.text.label_tag }}{{ form.text }}{{ form.text.errors }}
+            </div>
+            <div class="g-recaptcha" data-callback="" data-sitekey="6Lc_2UkaAAAAALOE3-6GCwh3-sUDAbidcw1-65e6"></div>
+            <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">送信</button>
+                    <a href="{% url 'post:detail' pk=post.pk %}" class="btn btn-back btn-sm">戻る</a>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	function clearcall(code) {
+		if(code !== ""){
+			$(':submit[name=button]').removeAttr("disabled");
+		}
+	}
+	</script>
+{% endblock post_main %}

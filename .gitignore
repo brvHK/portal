@@ -1,0 +1,15 @@
+portal/settings.py
+portal/*.json
+*/migrations/*
+manage.py
+Readme.md
+portal/uwsgi_params
+cms/templates/admin/*
+**/tests.py
+story/contents/build/*
+kakeibo
+.vscode
+admin
+*.pyc
+*/admin.py
+*.conf

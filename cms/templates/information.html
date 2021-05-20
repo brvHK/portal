@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% load static %}{% block title %}Fの世界 このサイトについて{% endblock %} {% block header %}
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+<link href="{% static 'css/information.css' %}" rel="stylesheet"> {% endblock %} {% block main %}
+<div class="information-wrapper" id="main">
+    <h1 class="page-header"><i class="fa fa-info" aria-hidden="true"></i> Information</h1>
+    <div class="about-site">
+        <h2>はじめに</h2>
+        <section>　当サイトをご覧いただき、ありがとうございます。<br>当サイトは<a href="{% url 'HaLu' %}">HaLu</a>の創作したファンタジー世界を、小説や雑貨にして紹介しています。ぜひ様々なコンテンツをお楽しみください。</section>
+        <h2>Fの世界とは</h2>
+        <section>Fの世界 については <a href="{% url 'this-site' %}">こちら</a> をご覧ください。</section>
+        <h2>Fの世界のアイテムを手にしたいときは？</h2>
+        <section>アイテムにある作品は HaLu より、イベントやを<a href="https://minne.com/@hyu06119/profile" target="_blank">通販サイト minne</a>を通じて販売しています。<br>作品の作成、公開は不定期に行っていますので、ほしい作品がありましたら、<a href="https://twitter.com/Hyu_HaLu" target="_blank"><i class="fa fa-twitter"></i>Twitter</a> のDM やメールから、気軽にお問い合わせください。
+        </section>
+        <h2>著作権について</h2>
+        <section>
+             　このサイトは、 <a href="{% url 'HaLu' %}">HaLu</a> の作品、及びその小説のコンテンツ配信を目的としています。ここで紹介する作品及び小説の著作はすべて <a href="/about/Artist/HaLu">HaLu</a> に帰属します。従って、作品の転売、複製等の行為及び作品の写真の無断転載の行為はご遠慮いただけますようお願いします。
+        </section>
+        <h2>このサイトについて</h2>
+        <section>
+            　一方でサイト構築においては、 <a href="https://python.org/" target="_blank">Python</a> のWebアプリケーションフレームワーク<a href="https://docs.djangoproject.com/" target="_blank">Django</a>および Bootstrap を用いて構築しています。PythonやDjangoなど主にITに関する技術情報を Blog にて配信する予定です。ご興味がある方は是非ご覧ください。以下に Python や Django のバージョン情報を記載します。
+        </section>
+        <div class="version-info">
+            <dl>
+                <dt>Python のVersion情報
+                    <dd> {{ python_version }}</dd>
+                </dt>
+                <dt>Django のバージョン
+                    <dd> {{ django_version }}</dd>
+                </dt>
+            </dl>
+        </div>
+        <details class="infobox">
+            <summary>今後のアップデート予定</summary>
+            <ul id="update-contents">
+                <li>小説更新</li>
+                <li>ブログ製作</li>
+                <li>Githubにソースをアップする</li>
+                <li>作品の追加</li>
+                <li>Fの住人ページ作成</li>
+                <li>謎解きゲーム作成</li>
+            </ul>
+        </details>
+    </div>
+</div>
+
+{% endblock %}

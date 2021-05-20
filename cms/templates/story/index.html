@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %} - プロローグ - {{title}}{% endblock %} {% load static %} {% block header %}
+<link href="{% static 'css/Story.css' %}" rel="stylesheet">
+<style type="text/css">
+    div#wrapper {
+        background-image: url("/static/img/story/bg_{{chapter}}.jpg");
+    }
+</style> {% endblock %} {% block main %}
+<div class="container">
+    <div id="{{chapter}}" class="chapter-wrapper row">
+        <a href="/story/prologue/1st">The <strong
+            class="F">F</strong>ixed World</a>
+        <div class="prologue-box" id="story-first"><<section>第一章</section></div>
+        <div class="prologue-box" id="story-second"><section>第二章</section></div>
+        <div class="prologue-box third"><section>第三章</section></div>
+    </div>
+</div>
+{% endblock %} {% block new %}
+<div id="new">
+
+</div>
+{% endblock %} {% block Artist %} {% endblock %}

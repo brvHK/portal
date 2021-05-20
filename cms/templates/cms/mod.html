@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% load static %} {% block title %}作品の{{ edit_type }}{% endblock title %}
+{% block extrahead %}
+{% endblock %} {% block main %}
+<div id="main-contents">
+    <div class="form-wrapper">
+        <div class="item-form">
+        <h3 class="page-header">作品の<strong>{{ edit_type }}</strong></h3>
+        {% if item_id %}
+        <form action="{% url 'cms:item_mod' item_id=item_id %}" method="post" class="form-item" role="form"
+            autocomplete="off" enctype="multipart/form-data">
+            {% else %}
+            <form action="{% url 'cms:item_add' %}" method="post" class="form-item" role="form" autocomplete="off"
+                enctype="multipart/form-data">
+                {% endif %} {% csrf_token %}
+                <div class="form-group">
+                    {{ form.name.id_forlabel }}{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.detail.id_forlabel }}{{ form.detail.label_tag }}{{ form.detail }} {{ form.detail.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.category.id_forlabel }}{{ form.category.label_tag }}{{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.chapter.id_forlabel }}{{ form.chapter.label_tag }}{{ form.chapter }}{{ form.chapter.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.date.id_forlabel }}{{ form.date.label_tag }}{{ form.date }}{{ form.date.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.minne_url.id_forlabel }}{{ form.minne_url.label_tag }}{{ form.minne_url }}{{ form.minne_url.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.is_sold.id_forlabel }}{{ form.is_sold.label_tag }}{{ form.is_sold }}{{ form.is_sold.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.price_sold.id_forlabel }}{{ form.price_sold.label_tag }}{{ form.price_sold }}{{ form.price_sold.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.comment.id_forlabel }}{{ form.comment.label_tag }}{{ form.comment }}{{ form.comment.errors }}
+                </div>
+            </div>
+            <div class="item-image-form">
+
+                <h3>画像の追加</h3>
+                <div class="item-images-create">
+                    <div class="upload-portfolio-image-btn">
+                        JPEG / PNG / GIF形式に対応しています
+                    </div>
+                    <div class="">
+                        {%if images %}
+                        <div class="">
+                        この作品の画像 ({{ images.count }})
+                        </div>
+                        {% for img in images %}
+                        <img class="small-item-image" src="{{ img.img.url }}" />
+                        {% endfor %}
+                        {% else %}
+                        <secion class="">
+                            この作品の画像はありません
+                        </secion>
+                        {% endif %}
+                    </div>
+                    <hr>
+                   
+
+                    {% for image_form in image_formset %}
+                    <div class="item-image-add">
+                        <div class="form-group">
+                            {{ image_form.alt.id_forlabel }}{{ image_form.alt.label_tag }}{{ image_form.alt }}{{ image_form.alt.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ image_form.img.id_forlabel }}{{ image_form.img.label_tag }}{{ image_form.img }}{{ image_form.img.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ image_form.item.id_forlabel }}{{ image_form.item.label_tag }}{{ image_form.item }}{{ image_form.item.errors }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {{ image_formset.management_form }}
+                    
+                    {% for error in form.image.image.errors %}
+                    <span class="text-warning">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <a href="{% url 'cms:item_list' %}" class="btn btn-back btn-sm">戻る</a>
+                </div>
+            </form>
+
+    </div>
+</div>
+{% endblock main %}

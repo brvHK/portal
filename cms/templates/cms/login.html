@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}ログイン{% endblock %} {% block extrastyle %} {% endblock %} {% block extrahead %} {% endblock %} {% block main %} 
+
+<div class="login-panel-wrapper">
+    <center>
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">Welcome!!</h3>
+            <section class="panel-message"> ID PW を入力してね</section>
+            {% if form.errors %}
+<div class="alert alert-danger" role="alert">
+    <p>ユーザ名 またはパスワードが間違っています。もう一度入力してください。</p>
+</div>
+{% endif %}
+        </div>
+
+        <div class="login-panel">
+
+            <form class="login-form" action="{% url 'login' %}" method="post" role="form">
+                {% csrf_token %}
+                <div class="form-wrapper">
+                    <div class="form-item">
+                        <i class="fas fa-user fa-fw"></i>
+                        <input id="id_username" name="username" type="text" value="" maxlength="256" placeholder="Username" aria-describedby="sizing-addon1" autofocus required/>
+                    </div>
+                    <div class="form-item">
+                        <i class="fas fa-lock fa-fw"></i>
+                        <input id="id_password" name="password" type="password" value="" maxlength="256" placeholder="Password" aria-describedby="sizing-addon1" required/>
+                    </div>
+                    <div class="form-item">
+                        <button type="submit" class="login-btn"><i class="fas fa-fw fa-sign-in-alt"></i>ログイン</button>
+                        <input name="next" type="hidden" value="{{ next }}" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </center>
+
+</div>
+{% endblock %}

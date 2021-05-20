@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% load static %}{% load custom_filter %}{% block title %}プライバシーポリシー | Fの世界{% endblock %} {% block head_extra %}
+<link href="{% static 'css/post.css' %}" rel="stylesheet">
+{% endblock %} {% block main %}
+<div class="information-wrapper" id="main">
+    <h1 class="page-header"><i class="fa fa-info" aria-hidden="true"></i> プライバシーポリシー</h1>
+    <div class="privacy-policy">
+        <article class="markdownx">{{ body|markdown_to_html|safe }}</article>
+    </div>
+</div>
+{% endblock %}

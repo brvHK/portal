@@ -1,0 +1,99 @@
+{% extends "cms/post/base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.title }} {% endblock %}
+{% block post_main %}
+<div id="main-visual" class="post-container">
+    <div class="post">
+        <div class="post-detail card">
+            <div class="center-wrapper">
+            <h1 class="item-title">{{ object.title }}</h1>
+            </div>
+            <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="/post/list" itemprop="item">
+                        <span itemprop="name">全ての投稿</span>
+                    </a>
+                    <meta itemprop="position" content="1" />
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="/post/list?postbigcategory={{ object.category.parent.id }}" itemprop="item">
+                        <span itemprop="name">{{ object.category.parent.name }}</span>
+                    </a>
+                    <meta itemprop="position" content="2" />
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="/post/list?category={{ object.category.id }}" itemprop="item">
+                        <span itemprop="name">{{ object.category }}</span>
+                    </a>
+                    <meta itemprop="position" content="3" />
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="" itemprop="item">
+                        <span itemprop="name">{{ object.title }}</span>
+                    </a>
+                    <meta itemprop="position" content="4" />
+                </li>
+                
+            </ul>
+
+            <div class="post-thumnail-wrapper" data-ride="carousel">
+                {% if object.thumnail %}
+                <div class="image-frame" id="post-id-{{ object.id }}">
+                    <img src="{{ object.thumnail.url }}" alt="">
+                </div>
+                {% endif %}
+            </div>
+            <div class="item-comments">
+                <div class="item-create-date-wrapper">
+                    <span class="item-create-date"><i class="far fa-calendar-plus"></i>&nbsp;{{ object.created_at }}</span>
+                    <span class="item-updated-date"><i class="fas fa-redo"></i>&nbsp;{{ object.updated_at }}</span>
+                    <div class="filter">
+                    {% for tag in object.tag.all %}<span class="post-tag tag tag-update"><a style="color:white;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></span>{% endfor %}
+                </div>
+                </div>
+                <div class="detail-wrapper">
+                    <article class="markdownx"> {{ object.body| markdown_to_html}}</article>
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        <div class="post-comments card">
+            <h3 class="">コメント</h3>
+            {% for comment in comments %}
+                <div class="comment">
+                <div class="date">{{ comment.created_at }}</div>
+                    <strong>{{ comment.name }}</strong>
+                    <p>{{ comment.text|markdown_to_html_with_escape }}</p>
+                </div>
+            {% empty %}
+                <p>この記事はコメントがありません。</p>
+
+            {% endfor %}
+            <p><a href="{% url 'post:comment_create' post.pk %}" target="_blank" rel="nofollow">記事にコメントする</a></p>
+        </div>
+        
+    </div>
+    
+</div>
+{% endblock post_main %}
+
+{% block post_aside_before %}
+<div id="toc-wrapper">
+    <h3 class="item-title">目次</h3>
+</div>
+<script type="text/javascript">
+    function clone_toc() {
+        // クローン生成
+        tpl   = document.getElementsByClassName('toc')[0];
+        clone = tpl.cloneNode(true);
+        base = document.getElementById('toc-wrapper')
+        base.appendChild(clone);
+    }
+    clone_toc();
+</script>
+<div class="creator-icon-wrappter centered">  
+    <h2 class="item-title"><i class="fas fa-user-edit"></i>ライター</h2>
+    <span class="">{{ object.writer }}</span>
+    <div class="creator-icon"><img src="/static/img/about/{{ object.writer }}.jpg"></div>
+    <div class="creator-profile">{{ object.writer.profile.text }}</div>
+ </div>
+{% endblock %}
