@@ -2,13 +2,14 @@ import os
 import glob
 from PIL import Image
 
-files = glob.glob('/home/kenichi/site/uploads/post/*')
+# files = glob.glob('/home/kenichi/site/uploads/post/*')
+files = glob.glob('/home/kenichi/site/uploads/*')
 
 width_base = 1000
 
 for f in files:
     title, ext = os.path.splitext(f)
-    if ext in ['.jpg', '.png']:
+    if ext in ['.jpg','.JPG','.jpeg','.JPEG', '.png','.PNG','.bmp','.BMP']:
         file_size = os.path.getsize(f) /1024
         if file_size >500:
             img = Image.open(f)

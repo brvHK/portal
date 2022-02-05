@@ -1,6 +1,19 @@
-{% extends "base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.name }} 作品紹介
-{% endblock %}{% block extrahead %}
-{% endblock %} {% block main %}
+{% extends "base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.name }}|作品紹介
+{% endblock %}{% block head_extra %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" href="/static/css/lightbox.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="/static/js/lightbox.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+{% endblock %} 
+{% block ogp_title %}{{ object.name }}|作品紹介{% endblock %}
+{% block ogp_image %}
+{% with ogp_item_image=object.id|item_images|first %}
+https://world-of-f.website{{ ogp_item_image.img.url  }}
+{% endwith %}
+{% endblock %}
+{% block ogp_description %}{{ object.detail }}{% endblock %}
+{% block main %}
 <div id="main-visual" class="container">
     <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
@@ -24,49 +37,44 @@
     </ul>
     <div class="item-detail-wrapper">
         <div class="item-detail item-card">
+            {% if user.is_authenticated %}
+            <a href="{% url 'cms:item_mod' object.id %}" class="button-sticky add-button"><i class="fas fa-pen"></i></a>
+            {% endif %}
             <h1 class="item-title">{{ object.name }}</h1>
 
             <div class="item-image" data-ride="carousel">
-                <div class="item-image-wrapper image-frame" id="item-id-{{ item.id }}">
-                    {% with images=object.id|item_images %}
-                    {% for image in images %}
-                    <span class="lightness-icon">
-                        {%if image.is_in_dark %}
-                        <i class="fas fa-moon"></i>
-                        {% else %}
-                        <i class="fas fa-sun"></i>
-                        {% endif %}
-                    </span>
-                    {% if object.is_sold %}
-                    <div class="ribbon_soldout">
-                        <span class="ribbon">SOLD OUT</span>
+                {% if object.is_sold %}
+                    <div class="tag-wrapper">
+                        <span class="tag tag-end">SOLD OUT</span>
                     </div>
                     {% endif %}
                     {% if object.date|is_new %}
-                    <div class="ribbon_new-wrapper">
-                        <span class="ribbon_new">NEW</span>
+                    <div class="tag-wrapper">
+                        <span class="tag tag-new">新作</span>
                     </div>
                     {% endif %}
-                        <img src="{{ image.img.url }}" alt="{{ image.alt }}">
-                    <style>
-                        #item-id-{{ item.id }} img:nth-of-type({{ forloop.counter }}),
-                        #item-id-{{ item.id }} span:nth-of-type({{ forloop.counter }}) {
-                            animation-delay: {{ forloop.counter|make_delay }}s;
-                        }
-                        {% if forloop.last %}
-                        #item-id-{{ item.id }} img,
-                        #item-id-{{ item.id }} span {
-                            animation : ItemSlideAnime {{ forloop.counter|make_delay|add:"9" }}s ease infinite;
-                        }
-                        {% endif %}
-                        #item-id-{{ item.id }} img:nth-of-type(1){
-                            position: relative;
-                        }
-                        }
-                    </style>
+                <div class="image-frame" id="item-id-{{ item.id }}">
+                    
+
+                    {% with images=object.id|item_images %}
+                    {% for image in images %}
+                    <a href="{{ image.img.url }}" data-lightbox="{{ image.item.name }}">
+                        <img src="{{ image.img.url }}" alt="{{ image.item.name }}">
+                    </a>
                     {% endfor %}
                     {% endwith %}
-                </div>                    
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                      $('.image-frame').slick({
+                        　　arrows: true,
+ 　　                       slidesToShow:1,
+                            fade: true,
+ 　　                       prevArrow:'<div class="slide-prev"></div>',
+ 　　                       nextArrow:'<div class="slide-next"></div>'
+                      });
+                    });
+                  </script>                    
             </div>
             <div class="item-comments">
                 <div class="" id="detail">
@@ -85,10 +93,10 @@
                 </div>
                 {% endif %}
             </div>
+            {% if object.comment %}
             <div class="HaLu-comments">
                 <div class="comment-wrapper">
-                    <p>作者より♪</p>
-                    <div class="faceicon">
+                    <div class="creator-icon-wrappter">  
                         <img src="/static/img/about/HaLu.jpg" />
                     </div>
                     <div class="comment">
@@ -97,22 +105,24 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div class="item-prev-next">
                 <div class="item-prev">
-                    {% with prev=object.get_previous_by_date %}
-                    {% if prev %}
+                    {% with next=object.get_next_by_date %}
+                        {% if next %}
                         <p>Prev</p>
-                        <a class="" title="Prev ({{ prev.name}})" href="{% url 'cms:item_detail' prev.pk %}"><i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;{{ prev.name }}</a>
-                    {% endif %}
+                            <a  class="" title="Next ({{ next.name }})" href="{% url 'cms:item_detail' next.pk %}"><i class="fas fa-backward"></i>&nbsp;&nbsp;&nbsp;{{ next.name }}</a>
+                        {% endif %}
                     {% endwith %}
                 </div>
                 <div class="item-next">
-                    {% with next=object.get_next_by_date %}
-                        {% if next %}
+                    {% with prev=object.get_previous_by_date %}
+                    {% if prev %}
                         <p>Next</p>
-                            <a  class="" title="Next ({{ next.name }})" href="{% url 'cms:item_detail' next.pk %}">{{ next.name }}&nbsp;&nbsp;&nbsp;<i class="fas fa-forward"></i></a>
-                        {% endif %}
+                        <a class="" title="Prev ({{ prev.name}})" href="{% url 'cms:item_detail' prev.pk %}">{{ prev.name }}&nbsp;&nbsp;&nbsp;<i class="fas fa-forward"></i></a>
+                    {% endif %}
                     {% endwith %}
+                    
                 </div>
             </div>
         </div>

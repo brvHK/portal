@@ -181,8 +181,8 @@ class Item(models.Model):
     date = models.DateField(u'日付')
     minne_url = models.URLField(u'ミンネのURL', blank=True, null=True)
     is_sold = models.BooleanField(u'売れたか', default=False)
-    price = models.IntegerField(u'値段', default=1000)
-    price_sold = models.IntegerField(u'実際売った値段', default=1000)
+    price = models.IntegerField(u'値段', default=0)
+    price_sold = models.IntegerField(u'実際売った値段', default=0)
     comment = models.TextField(
         u'作者のコメント', max_length=300, blank=True, null=True)
 
@@ -196,8 +196,8 @@ class ItemImage(models.Model):
     """
 
     class Meta:
-        verbose_name = '画像'
-        verbose_name_plural = '画像'
+        verbose_name = 'アイテム画像'
+        verbose_name_plural = 'アイテム画像'
 
     def get_image_path(self, filename):
         """カスタマイズした画像パスを取得する.
@@ -211,7 +211,7 @@ class ItemImage(models.Model):
         extension = os.path.splitext(filename)[-1]
         return name + extension
 
-    alt = models.CharField(u'画像名', max_length=30)
+    #alt = models.CharField(u'画像名', max_length=30, blank=True, null=True)
     img = models.ImageField(u'作品の画像', upload_to=get_image_path)
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, blank=True,
                             null=True, verbose_name="作品", related_name="ITEM")
@@ -220,7 +220,11 @@ class ItemImage(models.Model):
     is_itemlist = models.BooleanField(u'アイテムリストに載せる', default=True)
 
     def __str__(self):
-        return self.alt
+        image_name = "関連付けられていないアイテムの画像"
+        path = self.img.name
+        if self.item:
+            image_name = self.item.name + "の画像"
+        return image_name + "({})".format(path)
 
     def delete_previous_file(function):
         """不要となる古いファイルを削除する為のデコレータ実装.
@@ -270,6 +274,72 @@ class InfoCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+class PostImage(models.Model):
+    """
+    ブログ の作品の画像
+    """
+
+    class Meta:
+        verbose_name = 'ブログ画像'
+        verbose_name_plural = 'ブログ画像'
+
+    def get_image_path(self, filename):
+        """カスタマイズした画像パスを取得する.
+
+        :param self: インスタンス (models.Model)
+        :param filename: 元ファイル名
+        :return: カスタマイズしたファイル名を含む画像パス
+        """
+
+        name = str(uuid.uuid4()).replace('-', '')
+        extension = os.path.splitext(filename)[-1]
+        return name + extension
+
+    #alt = models.CharField(u'画像名', max_length=30, blank=True, null=True)
+    img = models.ImageField(u'ブログ画像', upload_to=get_image_path)
+
+    def __str__(self):
+        name = str(self.id) if self.id else "ブログ画像"
+        return name
+
+    def delete_previous_file(function):
+        """不要となる古いファイルを削除する為のデコレータ実装.
+
+        :param function: メイン関数
+        :return: wrapper
+        """
+        def wrapper(*args, **kwargs):
+            """Wrapper 関数.
+
+            :param args: 任意の引数
+            :param kwargs: 任意のキーワード引数
+            :return: メイン関数実行結果
+            """
+            self = args[0]
+
+            # 保存前のファイル名を取得
+            result = PostImage.objects.filter(pk=self.pk)
+            previous = result[0] if len(result) else None
+            super(PostImage, self).save()
+
+            # 関数実行
+            result = function(*args, **kwargs)
+
+            # 保存前のファイルがあったら削除
+            #if previous:
+            #    os.remove(MEDIA_ROOT + "/" + previous.img.name)
+            return result
+        return wrapper
+
+    @delete_previous_file
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(PostImage, self).save()
+
+    @delete_previous_file
+    def delete(self, using=None, keep_parents=False):
+        super(PostImage, self).delete()
+
 
 class SiteInfo(models.Model):
 

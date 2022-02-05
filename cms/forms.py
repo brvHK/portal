@@ -15,6 +15,7 @@ from markdownx.widgets import MarkdownxWidget
 from cms.models import Item
 from cms.models import ItemImage
 from cms.models import Post
+from cms.models import PostImage
 from cms.models import Comment
 from cms.models import Reply
 
@@ -52,7 +53,7 @@ class ItemImageForm(ModelForm):
 
     class Meta:
         model = ItemImage
-        fields = ('alt', 'img', 'item', 'is_in_dark', 'is_topPageImage','is_itemlist')
+        fields = ('img', 'item', 'is_in_dark', 'is_topPageImage','is_itemlist')
 
 
     def __init__(self, *args, **kwargs):
@@ -66,7 +67,7 @@ class ItemImageForm(ModelForm):
         widget=ClearableFileInput(attrs={'multiple': True}),
     )
 
-ItemImageFormSet = inlineformset_factory(Item, ItemImage, ItemImageForm, extra=5, max_num=5)
+ItemImageFormSet = inlineformset_factory(Item, ItemImage, ItemImageForm, extra=5, max_num=5, can_delete=False)
 
 class PostForm(ModelForm):
 
@@ -101,3 +102,21 @@ class ReplyCreateForm(ModelForm):
                 attrs={'placeholder': 'マークダウンに対応しています。'}
             )
         }
+
+class PostImageForm(ModelForm):
+
+    class Meta:
+        model = PostImage
+        fields = ('img',)
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = field.label  # placeholderにフィールドのラベルを入れる
+
+
+    img  = ImageField(
+        widget=ClearableFileInput(attrs={'multiple': True}),
+    )

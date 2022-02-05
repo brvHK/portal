@@ -10,9 +10,6 @@
         <h2 class="item-title">管理画面</h2>
         <p>この部分は管理者しか見えません</p>
         <div class="admin-vitual-wrapper">記事のグラフ
-        {% autoescape off %}
-        {{ plot_gantt }}　 <!-- HTMLコードの文字列が格納されたコンテキスト -->
-        {% endautoescape %}
         <h3>記事にコメントがあります</h3>
         <ul>
             {% for comment in comments_not_allowed %}

@@ -5,7 +5,6 @@
     <h1 class="welcome-title"><a href="#main-wrapper">Welcome to World of <strong class="F">F</strong></a></h1>
     {% for top_image in top_images%}
     <img src="{{ top_image.img.url }}" alt="{{ top_image.alt }}">
-    <div class="details">{{ top_image.alt }}</div>
     {% endfor %}
 
 </div>
@@ -16,7 +15,7 @@
             <div id="whatsnew" class="infobox">
                 <ul class="infobox-list">
                     {% for siteinfo in siteinfos %}
-                    <li class="infobox-list-item"><time>{{ siteinfo.date|date:"Y.m.d" }}</time><span class="tag tag-{{ siteinfo.tag }}">{{ siteinfo.info_category.name }}</span>&nbsp; {{ siteinfo.body | safe }}</li>
+                    <li class="infobox-list-item"><time>{{ siteinfo.date|date:"Y.m.d" }}</time><span style="background-color: {{ siteinfo.info_category.color }};" class="tag tag-{{ siteinfo.info_category.name }}">{{ siteinfo.info_category.name }}</span>&nbsp; {{ siteinfo.body | safe }}</li>
                     {% endfor %}
 
                 </ul>
@@ -27,38 +26,65 @@
     <div class="main-item-contents">
         <h2 class="index-contents">ITEM紹介</h2>
         <div class="item-information">
-
             <div id="item-category-1" class="item-card">
-                <label>{{ category_1_item.name }}</label>
                 {% with cat_1_image=category_1_item.id|item_images|first %}
-                {{ cat_1_image.alt }}
-                <a href="{% url 'cms:item_list' %}?category=1">
-                <img class="item-card-image" src="{{ cat_1_image.img.url }}" alt="{{ cat_1_image.alt }}">
-            </a>{% endwith %}
-                
+                <div class="item-card-thumb">
+                    <a href="{% url 'cms:item_list' %}?category={{ category_1_item.category.id }}">
+                    <img class="item-card-image" src="{{ cat_1_image.img.url }}" alt="{{ cat_1_image.item.name }}">
+                </a>
+                </div>
+                <div class="item-card-content">
+                <h3>{{ category_1_item.category }}</h3>
+                <label>{{ cat_1_image.item.name }}</label>
+
+            </div>
+                {% endwith %}
             </div>
             <div id="item-category-2" class="item-card">
-                <label>{{ category_2_ite.name }}</label>
                 {% with cat_2_image=category_2_item.id|item_images|first %}
-                {{ cat_2_image.alt }}
-                <a href="{% url 'cms:item_list' %}?category=2">
-                <img class="item-card-image" src="{{ cat_2_image.img.url }}" alt="{{ cat_2_image.alt }}">
-                </a>
+                <div class="item-card-thumb">
+                    <a href="{% url 'cms:item_list' %}?category={{ category_2_item.category.id }}">
+                    <img class="item-card-image" src="{{ cat_2_image.img.url }}" alt="{{ cat_2_image.item.name }}">
+                    </a>
+                </div>
+                <div class="item-card-content">
+                    <h3>{{ category_2_item.category }}</h3>
+                <label>{{ cat_2_image.item.name }}</label></div>
                 {% endwith %}
                 
             </div>
             <div id="item-category-3" class="item-card">
-                <label>{{ category_3_item.name }}</label>
                 {% with cat_3_image=category_3_item.id|item_images|first %}
-                {{ cat_3_image.alt }}
-                <a href="{% url 'cms:item_list' %}?category=2">
-                <img class="item-card-image" src="{{ cat_3_image.img.url }}" alt="{{ cat_3_image.alt }}">
-            </a>{% endwith %}
-                
+                <div class="item-card-thumb">
+
+                    <a href="{% url 'cms:item_list' %}?category={{ category_3_item.category.id }}">
+                        <img class="item-card-image" src="{{ cat_3_image.img.url }}" alt="{{ cat_3_image.item.name }}">
+                    </a>
+                </div>
+                <div class="item-card-content">
+                    <h3>{{ category_3_item.category }}</h3>
+                    <label>{{ cat_3_image.item.name }}</label>
+                </div>
+                {% endwith %}                
+            </div>
+            <div id="item-category-all" class="item-card">
+                {% with last_item_image=last_item.id|item_images|first %}
+                <div class="item-card-thumb">
+
+                    <a href="{% url 'cms:item_list' %}">
+                        <img class="item-card-image" src="{{ last_item_image.img.url }}" alt="{{ last_item_image.item.name }}">
+                    </a>
+                </div>
+                <div class="item-card-content">
+                    <h3>アイテム一覧</h3>
+                    <label>{{ last_item_image.item.name }}</label>
+                </div>
+                {% endwith %}                
             </div>
         </div>
         
     </div>
+    <!-- 
     <div class="main-story-contents" id="main-wrapper">
         <div class="story-information">
             <h2 class="index-contents">STORY</h2>
@@ -68,5 +94,6 @@
         </div>
         
     </div>
+    -->
 </div>
 {% endblock %}

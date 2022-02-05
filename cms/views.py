@@ -39,6 +39,7 @@ from cms.models import Category
 from cms.models import SiteInfo
 from cms.models import ItemImage
 from cms.models import Post
+from cms.models import PostImage
 from cms.models import SmallCategory
 from cms.models import PostBigCategory
 from cms.models import Tag
@@ -70,12 +71,13 @@ def index(request):
     context["year"]=str(today.year)
     context["month"]=str(today.month)
 
-    context["siteinfos"] = SiteInfo.objects.all().order_by('date')
-    context["top_images"] = ItemImage.objects.filter(is_topPageImage=True)[:5]
+    context["siteinfos"] = SiteInfo.objects.all().order_by('-date')
+    context["top_images"] = ItemImage.objects.filter(is_topPageImage=True).order_by('-id')[:4]
 
-    context["category_1_item"] = Item.objects.filter(category=1).first()
-    context["category_2_item"] = Item.objects.filter(category=2).first()
-    context["category_3_item"] = Item.objects.filter(category=3).first()
+    context["category_1_item"] = Item.objects.filter(category=1).select_related().first()
+    context["category_2_item"] = Item.objects.filter(category=2).select_related().first()
+    context["category_3_item"] = Item.objects.filter(category=3).select_related().first()
+    context["last_item"] = Item.objects.select_related().last()
 
     return render(request, 'index.html', context)
 
@@ -100,28 +102,29 @@ class ItemList(ListView):
             print(e)
         except ValueError as e:
             print(e)
+        context["last_item"] = Item.objects.select_related().last()
         
         return context
 
     def get_queryset(self) -> QuerySet:
-        object_list = Item.objects.all()
+        object_list = Item.objects.all().order_by('-date','-id')
         param_value = self.request.GET.get("category")
         if ("category" in self.request.GET) and param_value.isdigit():
             try:
                 category = Category.objects.get(pk=param_value)
-                object_list = Item.objects.filter(category=category)
+                object_list = Item.objects.filter(category=category).order_by('-date')
             except Category.DoesNotExist as e:
                 print(e)
             except ObjectDoesNotExist as e:
                 print(e)
             except ValueError as e:
                 print(e)
-        
         return object_list
 
 class ItemDetail(DetailView):
     #template_name = 'user/member_detail.html'
     model = Item
+    queryset = Item.objects.select_related()
 
     def get_context_data(self, **kwargs):
         context = super(ItemDetail, self).get_context_data(**kwargs)
@@ -135,30 +138,41 @@ def mod(request, item_id=None):
     HaLu の作品の修正
     """
     context = {}
+    initial_formset=[]
     
 
     if item_id:
         context['edit_type'] = '編集'
         context['item_id'] = item_id
         context['images'] = ItemImage.objects.filter(item__id=item_id)
-
         item = get_object_or_404(Item, pk=item_id)
+        initial_formset = [
+            {'item':item.id},
+            {'item':item.id},
+            {'item':item.id},
+            {'item':item.id},
+            {'item':item.id},
+        ]
+
         
     else:
         context['edit_type'] = '新規投稿'
         item = Item()
     if request.method == 'POST':  
         form = ItemForm(request.POST, instance=item)
-        image_formset = ItemImageFormSet(request.POST or None, files=request.FILES, instance=item)
+
+        image_formset = ItemImageFormSet(request.POST or None, files=request.FILES, instance=item,initial = initial_formset)
 
         if form.is_valid() and image_formset.is_valid():
             item = form.save(commit=False)
             item.save()
             image_formset.save()
             return redirect('cms:item_list')
+        else:
+            context['image_formset'] = image_formset
     else:
         form = ItemForm(instance=item)
-        image_formset = ItemImageFormSet(instance=item)
+        image_formset = ItemImageFormSet(instance=item,initial = initial_formset)
         
     context["form"] = form
     context["image_formset"] = image_formset
@@ -371,12 +385,13 @@ def post_mod(request, post_id=None):
         context['post_id'] = post_id
 
         post = get_object_or_404(Post, pk=post_id)
+        context['post_thumnail'] = post.thumnail
         
     else:
         context['edit_type'] = '新規投稿'
         post = Post()
     if request.method == 'POST':  
-        form = PostForm(request.POST, instance=post, initial=initial_dict)
+        form = PostForm(request.POST, request.FILES, instance=post, initial=initial_dict)
         if form.is_valid():
             form.instance.writer = request.user
             post = form.save(commit=False)
@@ -393,14 +408,18 @@ def post_mod(request, post_id=None):
         form = PostForm(instance=post, initial=initial_dict)
         
     context["form"] = form
+    context["item_images"] = ItemImage.objects.all()
+    context["post_images"] = PostImage.objects.all()
+
     return render(request, 'cms/post/mod.html', context)
 
 def post_index(request):
     u"""Index View"""
     context = {}
 
-
+    
     if request.user.is_authenticated:
+        """
         df = [dict(Task="体裁整える", Start='2021-01-01', Finish='2021-02-28'),
             dict(Task="記事10個書く", Start='2021-03-05', Finish='2021-04-15'),
             dict(Task="公開", Start='2021-04-30', Finish='2021-05-05')]
@@ -408,6 +427,7 @@ def post_index(request):
         fig = ff.create_gantt(df,title='スケジュール')
         plot_fig = plot(fig, output_type='div', include_plotlyjs=False)
         context["plot_gantt"] = plot_fig
+        """
         context["comments_not_allowed"] =  Comment.objects.filter(is_publish=False)
     
     

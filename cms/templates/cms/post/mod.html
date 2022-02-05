@@ -31,19 +31,27 @@
                     <a href="javascript:void(0);" onclick="window.open('{% url 'post:popup_tag_create' %}','subwin','width=500,height=500');">+</a>
                 </div>
                 <div class="form-group">
-                    {{ form.thumnail.id_forlabel }}{{ form.thumnail.label_tag }}{{ form.thumnail }}{{ form.thumnail.errors }}
+                    {{ form.thumnail.id_forlabel }}
+                    {% if post_thumnail %}
+                    <div style="max-width: 300px;">
+                    <img src="{{ post_thumnail.url }}" alt="{{ post_thumnail.name }}" style="max-width: 100%;">
+                    </div>
+                    {% endif %}
+                    {{ form.thumnail.label_tag }}{{ form.thumnail }}{{ form.thumnail.errors }}
+                    
                 </div>
                 <div class="form-group">
                     {{ form.is_publish.id_forlabel }}{{ form.is_publish.label_tag }}{{ form.is_publish }}{{ form.is_publish.errors }}
                 </div>
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn btn-wide btn-primary">保存</button>
+                    <button class="btn btn-primary btn-wide " type="submit" name="save_and_add">保存してもう一つ追加</button>
+                    <button class="btn btn-primary btn-wide " type="submit" name="save_and_edit">保存して編集を続ける</button>
+                    <a href="{% url 'post:list' %}" class="btn btn-wide btn-back btn-sm">戻る</a>
+                </div>
+
             </div>
            
-                <div class="form-submit-wrapper">
-                    <button type="submit" class="btn btn-primary">保存</button>
-                    <button class="btn btn-primary" type="submit" name="save_and_add">保存してもう一つ追加</button>
-                    <button class="btn btn-primary" type="submit" name="save_and_edit">保存して編集を続ける</button>
-                    <a href="{% url 'post:list' %}" class="btn btn-back btn-sm">戻る</a>
-                </div>
             </form>
             <script>
                 function add_option(name, pk, selector_id){
@@ -63,7 +71,74 @@
                     add_option(name, pk, "id_tag");
                 }
             </script>
+            <script>
+                    function copyToClipboard(imageid, image_path) {
+                        // コピー対象をJavaScript上で変数として定義する
+                        // ![385](/uploads/markdownx/6c53db2c-9c95-4293-b381-169a554f12e1.jpg)
+                        copy_text = "![ブログ画像]" + "("+image_path+")";
+                        navigator.clipboard.writeText(copy_text).then(function () {
+                                // コピーに成功した場合の処理
+
+                        }, function () {
+                                // コピーに失敗した場合の処理
+                                alert("コピーに失敗しました");
+                        });
+                    }
+            </script>
 
     </div>
+    <div class="item-form item-images-create">
+        <h3 class="page-header">画像の投稿</h3>
+        <div class="upload-portfolio-image-btn">
+            JPEG / PNG / GIF形式に対応しています。
+            画像を貼り付けるには、コピーするボタンを押下して本文に貼り付けて下さい
+        </div>
+        <h4 class="page-header">ブログ用画像の投稿</h4>
+            <p>ブログ用の画像の追加は<a href="/admin/cms/postimage/add/" target="_blank">こちら</a>から</p> 
+            <details class="infobox">
+            <summary>ブログ画像</summary>
+            {% if post_images %}
+            <div class="">
+            ブログ用の画像 ({{ post_images.count }})
+            </div>
+            <div class="image-gallery">
+            {% for img in post_images %}
+            <div class="image-gallery-item">
+            <img class="small-item-image" src="{{ img.img.url }}" />
+            <button type="button"  value="{{ img.img.url }}" id="{{ img.img.name }}" onclick="copyToClipboard(this.id,this.value)">コピーする</button>
+        </div>
+            {% endfor %}
+            </div>
+            {% else %}
+            <secion class="">
+                ブログ用の画像はありません
+            </secion>
+
+            {% endif %}
+        </details>
+        <h4 class="page-header">作品画像の投稿</h4>
+        <p>アイテム追加は<a href="{% url 'cms:item_add' %}" target="_blank">こちら</a>から</p> 
+        <details class="infobox">
+            <summary>作品画像</summary>
+            {% if item_images %}
+            <div class="">
+            作品の画像 ({{ item_images.count }})
+            </div>
+            <div class="image-gallery">
+            {% for img in item_images %}
+            <div class="image-gallery-item">
+                <img class="small-item-image" src="{{ img.img.url }}" />
+                <button type="button"  value="{{ img.img.url }}" id="{{ img.img.name }}" onclick="copyToClipboard(this.id,this.value)">コピーする</button>
+            </div>
+            {% endfor %}
+            </div>
+            {% else %}
+            <secion class="">
+                作品の画像はありません
+            </secion>
+            {% endif %}
+        </details>
+    </div>
+
 </div>
 {% endblock post_main %}

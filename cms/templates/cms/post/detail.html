@@ -1,10 +1,13 @@
-{% extends "cms/post/base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.title }} {% endblock %}
+{% extends "cms/post/base.html" %} {% load static %} {% load custom_filter %} {% block title %}{{ object.title }}|日々の雑記|Fの世界 {% endblock %}
+{% block ogp_title %}{{ object.title }}{% endblock %}
+{% block ogp_image %}{% if object.thumnail.image %}https://world-of-f.website/{{ object.thumnail.url }}{% endif %}{% endblock %}
+{% block ogp_description %}{{ object.abstract }}{% endblock %}
 {% block post_main %}
 <div id="main-visual" class="post-container">
     <div class="post">
         <div class="post-detail card">
             <div class="center-wrapper">
-            <h1 class="item-title">{{ object.title }}</h1>
+            <h1 class="post-title">{{ object.title }}</h1>
             </div>
             <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
                 <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
@@ -35,25 +38,30 @@
             </ul>
 
             <div class="post-thumnail-wrapper" data-ride="carousel">
-                {% if object.thumnail %}
+                {% if object.thumnail.image %}
                 <div class="image-frame" id="post-id-{{ object.id }}">
                     <img src="{{ object.thumnail.url }}" alt="">
                 </div>
                 {% endif %}
             </div>
             <div class="item-comments">
-                <div class="item-create-date-wrapper">
+                <div class="post-create-date-wrapper">
                     <span class="item-create-date"><i class="far fa-calendar-plus"></i>&nbsp;{{ object.created_at }}</span>
                     <span class="item-updated-date"><i class="fas fa-redo"></i>&nbsp;{{ object.updated_at }}</span>
-                    <div class="filter">
-                    {% for tag in object.tag.all %}<span class="post-tag tag tag-update"><a style="color:white;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></span>{% endfor %}
                 </div>
-                </div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'post:mod' object.id %}" class="button-sticky add-button"><i class="fas fa-pen"></i></a>
+                {% endif %}
+    
                 <div class="detail-wrapper">
                     <article class="markdownx"> {{ object.body| markdown_to_html}}</article>
                 </div>
 
             </div>
+            <div class="post-tags">
+                {% for tag in object.tag.all %}<span class="post-tag tag tag-update"><a style="color:white;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></span>{% endfor %}
+                </div>
+    
         </div>
         <hr>
         <div class="post-comments card">
@@ -78,7 +86,7 @@
 
 {% block post_aside_before %}
 <div id="toc-wrapper">
-    <h3 class="item-title">目次</h3>
+    <h3 class="post-sub-title">目次</h3>
 </div>
 <script type="text/javascript">
     function clone_toc() {
@@ -91,7 +99,7 @@
     clone_toc();
 </script>
 <div class="creator-icon-wrappter centered">  
-    <h2 class="item-title"><i class="fas fa-user-edit"></i>ライター</h2>
+    <h2 class="post-sub-title"><i class="fas fa-user-edit"></i>ライター</h2>
     <span class="">{{ object.writer }}</span>
     <div class="creator-icon"><img src="/static/img/about/{{ object.writer }}.jpg"></div>
     <div class="creator-profile">{{ object.writer.profile.text }}</div>

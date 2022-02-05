@@ -13,3 +13,4 @@ admin
 *.pyc
 */admin.py
 *.conf
+**/include/*

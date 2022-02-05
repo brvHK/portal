@@ -2,7 +2,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<head>
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125289492-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-125289492-1');
+    </script>
     <meta charset="UTF-8">
     <title>{% block title %}Fの世界へようこそ{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +18,16 @@
     <meta name="description"
         content="{% block site_discription %}このサイトは、ファンタジー -World of F-(Fの世界)の紹介と、HaLuの作品紹介をしています。さらにブログを通じて日々の出来事を発信します。{% endblock %}">
     <meta name="keywords"
-        content="Fの世界,World of F,アクセサリ,雑貨,手作り,ブログ,django,プログラミング{% block keywords_add %}{% endblock %}">
+        content="Fの世界,World of F,アクセサリ,雑貨,手作り{% block keywords_add %}{% endblock %}">
+    {% block ogp_meta %}
+    <meta property="og:title" content="{% block ogp_title %}Fの世界へようこそ{% endblock %}" />
+    <meta property="og:type" content="{% block ogp_type %}website{% endblock %}" />
+    <meta property="og:url" content="{% block ogp_url %}{{ request.build_absolute_uri }}{% endblock %}" />
+    <meta property="og:image" content="{% block ogp_image %}https://world-of-f.website/uploads/76f141a6170646ddae9b58690314cfc0.jpg{% endblock %}" />
+    <meta property="og:site_name" content="Fの世界" />
+    <meta property="og:description" content="{% block ogp_description %}このサイトは、ファンタジー -World of F-(Fの世界)の紹介と、HaLuの作品紹介をしています。さらにブログを通じて日々の出来事を発信します。{% endblock %}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {% endblock %}
     <link href="{% static 'css/reset.css' %}" rel="stylesheet" media="print" onload="this.media='all'">
     <link href="{% static 'css/common.css' %}" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/vnd.microsoft.icon">
@@ -18,14 +35,6 @@
         integrity="sha384-OLYO0LymqQ+uHXELyx93kblK5YIS3B2ZfLGBmsJaUyor7CpMTBsahDHByqSuWW+q" crossorigin="anonymous" media="print" onload="this.media='all'">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125289492-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'UA-125289492-1');
-    </script>
     <script data-ad-client="ca-pub-4595919122697983" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     {% if user.is_authenticated %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -56,9 +65,6 @@
                                     hspace="7" vspace="7" /></a>
                         </div>
                         <ul class="sp-header-menu">
-                            <li class="sp-header-menu-list"><a class="header-icon header-icon-site" id="about_site"
-                                    href="/about/this-site">Fの世界とは</a>
-                            </li>
                             <li class="sp-header-menu-list"><a class="header-icon header-icon-about"
                                     href="/item">ITEM</a></li>
                             <!-- <li class="header-search-item">
@@ -66,7 +72,9 @@
                             <a class="header-icon header-icon-search"><span>Search</span></a>
                         </li> -->
                             <li class="sp-header-menu-list">
+                                <!-- 
                                 <a href="/story" class="header-icon header-icon-story" id="story">小説プロローグ</a>
+                                -->
 
                                 <ul class="header-submenu">
                                     <li><a class="header-icon header-icon-story" href="/story/prologue/1st">The <strong
@@ -78,26 +86,33 @@
                                 </ul>
                             </li>
                             <li class="sp-header-menu-list"><a class="header-icon header-icon-about"
+                                href="/post">日々の雑記</a></li>
+
+                            <li class="sp-header-menu-list"><a class="header-icon header-icon-about"
                                     href="/about/HaLu">HaLuについて</a></li>
+                            <li class="sp-header-menu-list"><a class="header-icon header-icon-site" id="about_site"
+                                        href="/about/this-site">Fの世界とは</a>
+                            </li> 
                             <li class="sp-header-menu-list"> <a class="header-icon header-icon-info"
                                     href="/information">情報</a> </li>
                             <li class="sp-header-menu-list"><a class="header-icon header-icon-blog"
-                                    href="https://blog.world-of-f.website" target="_blank">ブログ</a></li>
+                                    href="https://world-of-f.com/wp" target="_blank">ブログ</a></li>
+                            <!--
                             <li class="sp-header-menu-list"><a href="/story-contents/index.html">&raquo;小説</a></li>
+                            -->
                         </ul>
                     </div>
                 </div>
             </nav>
             <nav class="pc-nav">
                 <div class="pc-menu"><a href="/item" class="header-menulinks">ITEM</a></div>
-                <div class="pc-menu"><a href="/story" class="header-menulinks">STORY</a></div>
+                <div class="pc-menu"><a href="/post" class="header-menulinks">POST</a></div>
                 <div class="pc-menu">
                     <a href="/"><img id="brand-logo" src="{% static 'img/logo.png' %}" alt="World of F" hspace="7"
                             vspace="7" /></a>
                 </div>
-
-                <div class="pc-menu"><a href="/about/HaLu" class="header-menulinks">ABOUT US</a></div>
-                <div class="pc-menu"><a href="/information" class="header-menulinks">INFO</a></div>
+                <div class="pc-menu"><a href="/about/HaLu" class="header-menulinks">CREATOR</a></div>
+                <div class="pc-menu"><a href="/story" class="header-menulinks">STORY</a></div>
             </nav>
 
 
@@ -122,24 +137,28 @@
                         <!-- <li class="header-search-item">
                         <input placeholder="Search" type="search" class="header-search">
                         <a class="header-icon header-icon-search"><span>Search</span></a>
-                    </li> -->
+                    </li> 
                         <li class="footer-menu-list">
                             <a href="/story" class="footer-icon header-icon-story" id="story">小説プロローグ</a>
 
                             
                         </li>
+                        -->
                         <li class="footer-menu-list"><a class="footer-icon header-icon-about"
                                 href="/about/HaLu">HaLuについて</a></li>
                         <li class="footer-menu-list"> <a class="footer-icon header-icon-info"
-                                href="/information">情報</a> </li>
+                                href="/information">サイト情報</a> </li>
                         <li class="footer-menu-list">
-                            <a href="/post" class="footer-icon header-icon-story" id="post">日々の雑記</a></li>
+                            <a href="/post" class="footer-icon header-icon-story" id="post">雑記</a></li>
                         <li class="footer-menu-list"><a class="footer-icon header-icon-blog"
                                 href="https://world-of-f.com/wp" target="_blank">ブログ</a></li>
+                        <!-- 
                         <li class="footer-menu-list"><a class="footer-icon" href="/story-contents/index.html">&raquo;小説</a></li>
+                        -->
                     </ul>
                 </div>
                 <div class="footer-stoty">
+                    <!--
                     <ul class="footer-menu">
                         <li><a class="footer-icon header-icon-story" href="/story/prologue/1st">The <strong
                                     class="F">F</strong>ixed World</a></li>
@@ -148,6 +167,7 @@
                         <li><a class="footer-icon header-icon-story" href="#">The Magical <strong
                                     class="F">F</strong>antasy</a></li>
                     </ul>
+                    -->
                 </div>
             </div>
             <div class="footer-copyright">

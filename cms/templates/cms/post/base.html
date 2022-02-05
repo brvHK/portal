@@ -52,24 +52,34 @@
 <aside class="post-aside">
     <div class="post-aside-inner card">
     {% block post_aside_before %}{% endblock %}
-    <h2 class="post-aside-title item-title">最新記事</h2>
+    <h2 class="post-aside-title post-sub-title">最新記事</h2>
         {% for post in newest_posts %}
-            <div class="post-aside-list"><a href="{% url 'post:detail' post.pk %}" style="display:block;">{{ post.title }}</a>
-                <span style="display:block;">{{ post.created_at}}</span>
-            
-            </div>
+            <a href="{% url 'post:detail' post.pk %}" style="display:block;" class="post-aside-list">
+                <span style="display:block;" class="action-date">{{ post.created_at}}</span>{{ post.title }}
+            </a>
         {% endfor %}
     <div class="ad">
-        広告
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- 雑記のサイドバー -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-4595919122697983"
+            data-ad-slot="5602274640"
+            data-ad-format="auto"
+            data-full-width-responsive="true">
+        </ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
     </div>
     <div class="post-categories">
-        <h2 class="post-aside-title item-title">カテゴリ</h2>
+        <h2 class="post-aside-title post-sub-title">カテゴリ</h2>
         <ul class="post-aside-menu">
         {% for small_category in small_categories %}<li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?smallcategory={{ small_category.id }}">{{ small_category.name }}</a></li>{% endfor %}
         </ul>
     </div>
     <div class="post-tags">
-        <h2 class="post-aside-title item-title">タグ一覧</h2>
+        <h2 class="post-aside-title post-sub-title">タグ一覧</h2>
         <div class="post-tags-inner">
         {% for tag in tags_all %}<span class="post-tag tag tag-update"><a style="color:white;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></span>{% endfor %}
         </div>
@@ -84,7 +94,7 @@
             <a href="/post">日々の雑記</a>
         </div>
         <div class="footer-item">
-            <h2 class="post-aside-title item-title">カテゴリ</h2>
+            <h2 class="post-aside-title post-sub-title">カテゴリ</h2>
             <ul class="footer-menu">
                 {% for small_category in small_categories %}
                 <li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?smallcategory={{ small_category.id }}">
@@ -93,7 +103,7 @@
             </ul>
         </div>
         <div class="footer-item">
-            <h2 class="post-aside-title item-title">タグ</h2>
+            <h2 class="post-aside-title post-sub-title">タグ</h2>
             <ul class="footer-menu">
                 {% for tag in tags_all %}
                 <li class="post-aside-menu-list"><a style="color:gray;text-decoration: none;" href="/post/list?tag={{ tag.id }}">#{{ tag }}</a></li>
