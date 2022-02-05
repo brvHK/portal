@@ -1,1 +1,0 @@
-[{"model": "cms.category", "pk": 1, "fields": {"category": "雑貨"}}, {"model": "cms.category", "pk": 2, "fields": {"category": "アクセサリー"}}, {"model": "cms.category", "pk": 3, "fields": {"category": "オブジェ"}}]

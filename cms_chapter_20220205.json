@@ -1,1 +1,0 @@
-[{"model": "cms.chapter", "pk": 1, "fields": {"chapter": "1章", "name": "Fixed World　失われた 時 の世界"}}, {"model": "cms.chapter", "pk": 2, "fields": {"chapter": "2章", "name": "The Flickers Story"}}, {"model": "cms.chapter", "pk": 3, "fields": {"chapter": "3章", "name": "Magical Fantasy"}}, {"model": "cms.chapter", "pk": 4, "fields": {"chapter": "Mix", "name": null}}]

@@ -1,1 +1,0 @@
-[{"model": "cms.comment", "pk": 1, "fields": {"name": "管理人より", "text": "コメントしてみたよ", "target": 2, "created_at": "2021-02-04T15:53:15.523Z", "is_publish": false}}, {"model": "cms.comment", "pk": 2, "fields": {"name": "aa", "text": "aa", "target": 2, "created_at": "2021-02-04T16:29:20.491Z", "is_publish": false}}]
